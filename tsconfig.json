@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "module": "commonjs",
+    "target": "es6",
+    "alwaysStrict": true,
+    "lib": [
+        "dom",
+        "dom.iterable",
+        "scripthost",
+        "esnext",
+        "esnext.array",
+        "esnext.asynciterable",
+        "es7",
+        "es6",
+        "es2015.symbol",
+        "es2015.symbol.wellknown"
+    ]
+  },
+  "include": [
+    "./src/index.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}
