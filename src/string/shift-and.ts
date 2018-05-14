@@ -3,7 +3,7 @@ function getOccurrenceMask(p: string, len: number): Map<number, number> {
     for(let i = 0; i < len; i++) {
         let c = p.charCodeAt(i);
         if(!u.has(c)) u.set(c, 0);
-        u.set(c, u.get(c) | (1 << len - i - 1));
+        u.set(c, u.get(c) | (1 << i));
     };
     return u;
 }
@@ -17,16 +17,29 @@ function getOccurrenceMask(p: string, len: number): Map<number, number> {
 export function shiftAnd(p: string) {
     const pl = p.length;
     const u = getOccurrenceMask(p, pl);
-
-    return (s: string): number[] => {
-        const sl = s.length;
-        let sb: number = 0;
-        const indexes = [];
-        for(let j = 0; j < sl; j++) {
-            const ch = s.charCodeAt(j);
-            sb = u.has(ch) ? ((sb << 1) | 1) & u.get(ch): 0;
-            if(sb & 1) indexes.push(j - pl + 1);
+    const LAST_ONE = 1 << (pl - 1);
+    return {
+        firstIndex(s: string): number {
+            const sl = s.length;
+            let sb: number = 0;
+            const indexes = [];
+            for(let j = 0; j < sl; j++) {
+                const ch = s.charCodeAt(j);
+                sb = u.has(ch) ? ((sb << 1) | 1) & u.get(ch): 0;
+                if(sb & LAST_ONE && j - pl + 1 >= 0) return (j - pl + 1);
+            }
+            return -1;
+        },
+        findIndexes(s: string): number[] {
+            const sl = s.length;
+            let sb: number = 0;
+            const indexes = [];
+            for(let j = 0; j < sl; j++) {
+                const ch = s.charCodeAt(j);
+                sb = u.has(ch) ? ((sb << 1) | 1) & u.get(ch): 0;
+                if(sb & LAST_ONE && j - pl + 1 >= 0) indexes.push(j - pl + 1);
+            }
+            return indexes;
         }
-        return indexes;
-    }
+    };
 }
